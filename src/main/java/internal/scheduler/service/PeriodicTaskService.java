@@ -16,22 +16,22 @@ public class PeriodicTaskService {
     private Map<String, PeriodicTask> activePeriodicTasks = new HashMap<>();
 
     public void addNewPeriodicTask(String taskName, ITask iTask, LocalDateTime targetTime) {
-        if(!activePeriodicTasks.containsKey(taskName)) {
+        if (!activePeriodicTasks.containsKey(taskName)) {
             activePeriodicTasks.put(taskName, new PeriodicTask(iTask, targetTime));
         }
     }
 
     public void addNewPeriodicTaskDate(String taskName, ITask iTask, ICondition iCondition, LocalDateTime targetTime) {
-        if(!activePeriodicTasks.containsKey(taskName)) {
+        if (!activePeriodicTasks.containsKey(taskName)) {
             activePeriodicTasks.put(taskName, new PeriodicTask(iTask, iCondition, targetTime));
         }
     }
 
     public void removePeriodicTask(String taskName) {
-        if(activePeriodicTasks.containsKey(taskName)) {
+        if (activePeriodicTasks.containsKey(taskName)) {
             PeriodicTask periodicTask = activePeriodicTasks.get(taskName);
             periodicTask.stop();
-            activePeriodicTasks.remove(taskName,periodicTask);
+            activePeriodicTasks.remove(taskName, periodicTask);
         }
     }
 }

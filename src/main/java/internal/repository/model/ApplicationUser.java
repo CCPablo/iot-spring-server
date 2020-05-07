@@ -12,19 +12,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 public class ApplicationUser {
 
-        private String userId;
+    private String userId;
 
-        private String name;
+    private String name;
 
-        private String password;
+    private String password;
 
-        private Long timeStamp;
+    private Long timeStamp;
 
-        @Override
-        public String toString() {
-                return "UserEntity{" +
-                        ", userName='" + name + '\'' +
-                        ", passWord='" + password + '\'' +
-                        '}';
-        }
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                ", userName='" + name + '\'' +
+                ", passWord='" + password + '\'' +
+                '}';
+    }
 }

@@ -88,7 +88,7 @@ public class GatewayClient implements MqttCallbackExtended {
     @Override
     public void messageArrived(String topic, MqttMessage message) {
         log.info(String.format("MQTT message arrived with topic: %s,and message: %s", topic, Arrays.toString(message.getPayload())));
-        try{
+        try {
             processorMapper.getMsgProcessor(topic).process(message);
         } catch (ComponentNotRegisteredException e) {
 

@@ -18,13 +18,13 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class PeriodicTask {
 
-    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     private ScheduledFuture scheduledFuture;
 
-    private ICondition iCondition;
+    private final ICondition iCondition;
 
-    private ITask iTask;
+    private final ITask iTask;
 
     private LocalDateTime targetTime;
 
@@ -54,7 +54,7 @@ public class PeriodicTask {
 
     public void startExecution() {
         Runnable taskWrapper = () -> {
-            if(iCondition.test()) {
+            if (iCondition.test()) {
                 iTask.run();
             }
             startExecution();
@@ -63,7 +63,7 @@ public class PeriodicTask {
     }
 
     public void updateExecutionTime(LocalDateTime newTargetTime) {
-        if(scheduledFuture.cancel(true)) {
+        if (scheduledFuture.cancel(true)) {
             targetTime = newTargetTime;
             startExecution();
         }
@@ -83,7 +83,7 @@ public class PeriodicTask {
         ZonedDateTime zonedNextTarget =
                 zonedNow.withHour(targetTime.getHour()).withMinute(targetTime.getMinute()).withSecond(targetTime.getSecond())
                         .truncatedTo(ChronoUnit.SECONDS);
-        if(zonedNow.compareTo(zonedNextTarget) >= 0) {
+        if (zonedNow.compareTo(zonedNextTarget) >= 0) {
             zonedNextTarget = zonedNextTarget.plus(increment);
         }
         targetTime = zonedNextTarget.toLocalDateTime();

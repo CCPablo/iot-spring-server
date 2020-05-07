@@ -26,20 +26,20 @@ public class UnitService {
     }
 
     public void addValue(UnitValue value) {
-        if(!deviceService.isUnitPresent(value.getDeviceId(), value.getUnitId())) {
+        if (!deviceService.isUnitPresent(value.getDeviceId(), value.getUnitId())) {
             GatewayClient.publishMessage(new GatewayConnectMsg(true), TopicsToPub.GATEWAY_CONNECT_TOPIC);
             throw new ComponentNotRegisteredException();
         }
 
-        if(unitValuePresent(value.getDeviceId(), value.getUnitId())) {
+        if (unitValuePresent(value.getDeviceId(), value.getUnitId())) {
             UnitValue currentValue = cachedValues.get(value.getDeviceId()).get(value.getUnitId());
-            if(currentValue.getValue().equals(value.getValue())) {
+            if (currentValue.getValue().equals(value.getValue())) {
                 return;
             }
             currentValue.setValue(value.getValue());
             currentValue.setTimestamp(value.getTimestamp());
             unitValueRepository.addUnitValue(currentValue);
-        } else if(devicePresent(value.getDeviceId())){
+        } else if (devicePresent(value.getDeviceId())) {
             cachedValues.get(value.getDeviceId()).put(value.getUnitId(), value);
             unitValueRepository.addUnitValue(value);
         } else {

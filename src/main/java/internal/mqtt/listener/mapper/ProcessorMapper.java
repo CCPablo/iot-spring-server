@@ -18,12 +18,12 @@ public class ProcessorMapper {
     private final UnitValueProcessor unitValueProcessor;
 
     public IMsgProcessor getMsgProcessor(String topic) throws TopicNotRegisteredException {
-        if(TopicsToSub.UNIT_VALUE.topicMatch(topic)) {
+        if (TopicsToSub.UNIT_VALUE.topicMatch(topic)) {
             return unitValueProcessor;
-        } else if(TopicsToSub.DEVICE_CONNECT_INIT.topicMatch(topic)) {
+        } else if (TopicsToSub.DEVICE_CONNECT_INIT.topicMatch(topic)) {
             return deviceInitProcessor;
         } else {
-            throw new TopicNotRegisteredException() ;
+            throw new TopicNotRegisteredException();
         }
     }
 }

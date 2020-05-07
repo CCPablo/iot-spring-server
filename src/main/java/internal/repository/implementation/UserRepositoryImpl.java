@@ -45,14 +45,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public ApplicationUser findUserByUserName(String name) {
         Query query = new Query(Criteria.where("name").is(name));
-        return mongoTemplate.findOne(query , ApplicationUser.class, COLLECTION_NAME);
+        return mongoTemplate.findOne(query, ApplicationUser.class, COLLECTION_NAME);
     }
 
     @Override
     public long updateUser(ApplicationUser applicationUser) {
         Query query = new Query(Criteria.where("name").is(applicationUser.getName()));
         Update update = new Update().set("name", applicationUser.getName()).set("password", applicationUser.getPassword());
-        UpdateResult result = mongoTemplate.updateFirst(query,update, ApplicationUser.class, COLLECTION_NAME);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, ApplicationUser.class, COLLECTION_NAME);
 
         return result.getMatchedCount();
     }

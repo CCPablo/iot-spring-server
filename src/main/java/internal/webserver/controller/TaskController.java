@@ -21,7 +21,7 @@ public class TaskController {
     @PostMapping(value = "/task/create")
     public void addNewTask(@RequestParam String name, @RequestParam Integer deviceId, @RequestParam Integer actuatorId, @RequestParam Integer minute) {
         CommuteTask commuteTask = new CommuteTask(deviceId, actuatorId, StatusType.ON);
-        periodicTaskService.addNewPeriodicTask(name, commuteTask, LocalDateTime.of(2020, 4,2,0,minute, 0));
+        periodicTaskService.addNewPeriodicTask(name, commuteTask, LocalDateTime.of(2020, 4, 2, 0, minute, 0));
     }
 
     @PostMapping(value = "/task/remove")

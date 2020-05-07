@@ -31,6 +31,6 @@ public class Device {
     List<Unit> units;
 
     @JsonPOJOBuilder(withPrefix = "")
-        public static class DeviceBuilder {
+    public static class DeviceBuilder {
     }
 }

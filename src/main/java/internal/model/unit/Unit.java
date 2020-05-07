@@ -30,6 +30,6 @@ public class Unit {
     StatusType status;
 
     @JsonPOJOBuilder(withPrefix = "")
-        public static class UnitBuilder {
+    public static class UnitBuilder {
     }
 }

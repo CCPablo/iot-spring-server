@@ -43,13 +43,13 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     @Override
     public void deleteDeviceById(Integer deviceId) {
         Query query = new Query(Criteria.where("deviceId").is(deviceId));
-        mongoTemplate.remove(query,Device.class);
+        mongoTemplate.remove(query, Device.class);
     }
 
     @Override
     public Device findDeviceById(Integer deviceId) {
         Query query = new Query(Criteria.where("deviceId").is(deviceId));
-        return mongoTemplate.findOne(query , Device.class);
+        return mongoTemplate.findOne(query, Device.class);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
         Update update = new Update()
                 .set("name", device.getName())
                 .set("units", device.getUnits());
-        UpdateResult result = mongoTemplate.updateFirst(query,update,Device.class);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, Device.class);
         return result.getMatchedCount();
     }
 }

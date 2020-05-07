@@ -13,7 +13,7 @@ public class UnitValue {
 
     private Long timestamp;
 
-    public UnitValue (Integer deviceId, Integer unitId, Long value) {
+    public UnitValue(Integer deviceId, Integer unitId, Long value) {
         this.deviceId = deviceId;
         this.unitId = unitId;
         this.value = value;

@@ -3,7 +3,7 @@ package internal.scheduler.condition;
 import internal.model.StatusType;
 import internal.mqtt.service.DeviceService;
 
-public class UnitCondition implements ICondition{
+public class UnitCondition implements ICondition {
 
     private DeviceService deviceService;
 

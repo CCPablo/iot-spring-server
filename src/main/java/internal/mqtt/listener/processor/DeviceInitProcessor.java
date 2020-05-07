@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @AllArgsConstructor
 @Service
-public class DeviceInitProcessor implements IMsgProcessor{
+public class DeviceInitProcessor implements IMsgProcessor {
 
     @Autowired
     DeviceService deviceService;

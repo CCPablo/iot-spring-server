@@ -20,10 +20,10 @@ public enum TopicsToSub {
     public boolean topicMatch(String topicToCheck) {
         String[] topicMembers = topic.split("/");
         String[] toCheckTopicMembers = topicToCheck.split("/");
-        if(topicMembers.length != toCheckTopicMembers.length) {
+        if (topicMembers.length != toCheckTopicMembers.length) {
             return false;
         }
-        for(int i =0; i < topicMembers.length; i++) {
+        for (int i = 0; i < topicMembers.length; i++) {
             if (!topicMembers[i].equals("+") && !topicMembers[i].equals("#")) {
                 if (!topicMembers[i].equals(toCheckTopicMembers[i])) {
                     return false;

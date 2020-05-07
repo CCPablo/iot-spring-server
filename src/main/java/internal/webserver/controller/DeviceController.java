@@ -22,12 +22,12 @@ public class DeviceController {
         this.deviceService = deviceService;
     }
 
-    @GetMapping (value = "/devices")
-    public List<Device> getAllDevices( ) {
+    @GetMapping(value = "/devices")
+    public List<Device> getAllDevices() {
         return deviceService.getAllDevices();
     }
 
-    @GetMapping (value = "/device/{id}")
+    @GetMapping(value = "/device/{id}")
     public Device getDevice(@PathVariable Integer id) {
         return deviceService.getDevice(id);
     }
