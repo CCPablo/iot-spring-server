@@ -11,7 +11,7 @@ import java.util.Set;
 @Builder
 public class Measures {
 
-    private Integer deviceId;
+    private Integer nodeId;
 
     Map<Integer, Set<UnitValue>> measures;
 }

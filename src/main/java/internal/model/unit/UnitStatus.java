@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class UnitStatus {
 
-    private Integer deviceId;
+    private Integer nodeId;
 
     private Integer id;
 

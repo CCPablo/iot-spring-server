@@ -29,14 +29,14 @@ public class UnitValueRepositoryImpl implements UnitValueRepository {
     }
 
     @Override
-    public List<UnitValue> findAllByUnitId(Integer deviceId, Integer unitId) {
-        Query query = new Query(Criteria.where("deviceId").is(deviceId));
+    public List<UnitValue> findAllByUnitId(Integer nodeId, Integer unitId) {
+        Query query = new Query(Criteria.where("nodeId").is(nodeId));
         return mongoTemplate.find(query, UnitValue.class);
     }
 
     @Override
-    public UnitValue findFirstByUnitId(Integer deviceId, Integer unitId) {
-        Query query = new Query(Criteria.where("deviceId").is(deviceId));
+    public UnitValue findFirstByUnitId(Integer nodeId, Integer unitId) {
+        Query query = new Query(Criteria.where("nodeId").is(nodeId));
         return mongoTemplate.findOne(query, UnitValue.class);
     }
 

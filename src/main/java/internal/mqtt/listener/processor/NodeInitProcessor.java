@@ -1,8 +1,8 @@
 package internal.mqtt.listener.processor;
 
-import internal.model.device.Device;
+import internal.model.node.Node;
 import internal.mqtt.listener.mapper.JsonMapper;
-import internal.mqtt.service.DeviceService;
+import internal.mqtt.service.NodeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -12,15 +12,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @AllArgsConstructor
 @Service
-public class DeviceInitProcessor implements IMsgProcessor {
+public class NodeInitProcessor implements IMsgProcessor {
 
     @Autowired
-    DeviceService deviceService;
+    NodeService nodeService;
 
     @Override
     public void process(MqttMessage message) {
-        Device deviceInitMsg = JsonMapper.getDeserializedMessage(message, Device.class);
+        Node nodeInitMsg = JsonMapper.getDeserializedMessage(message, Node.class);
 
-        deviceService.addNewDevice(deviceInitMsg);
+        nodeService.addNewNode(nodeInitMsg);
     }
 }

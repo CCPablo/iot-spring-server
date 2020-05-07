@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ActuatorValueMsg {
 
-    private Integer deviceId;
+    private Integer nodeId;
 
     private Integer unitId;
 

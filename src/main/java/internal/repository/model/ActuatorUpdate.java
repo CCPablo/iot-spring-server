@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("actuatorUpdates")
 public class ActuatorUpdate {
 
-    private Integer deviceId;
+    private Integer nodeId;
 
     private Integer actuatorId;
 

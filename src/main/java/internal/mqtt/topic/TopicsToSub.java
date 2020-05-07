@@ -2,8 +2,8 @@ package internal.mqtt.topic;
 
 public enum TopicsToSub {
 
-    UNIT_VALUE("/device/unit/value", 0),
-    DEVICE_CONNECT_INIT("/device/init", 2);
+    UNIT_VALUE("/node/unit/value", 0),
+    NODE_CONNECT_INIT("/node/init", 2);
 
     private final String topic;
     private final int qoS;

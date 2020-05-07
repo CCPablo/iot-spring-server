@@ -1,26 +1,26 @@
-package internal.mqtt.service;
+package internal.mqtt.listener.service;
 
 import internal.model.unit.UnitValue;
 import internal.mqtt.GatewayClient;
 import internal.mqtt.listener.exception.ComponentNotRegisteredException;
 import internal.mqtt.publisher.GatewayConnectMsg;
+import internal.mqtt.service.NodeService;
 import internal.mqtt.topic.TopicsToPub;
 import internal.repository.implementation.UnitValueRepositoryImpl;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Service
-public class UnitService {
+public class SensorService {
+
     private final UnitValueRepositoryImpl unitValueRepository;
 
     private final NodeService nodeService;
 
     private final Map<Integer, Map<Integer, UnitValue>> cachedValues = new ConcurrentHashMap<>();
 
-    public UnitService(UnitValueRepositoryImpl unitValueRepository, NodeService nodeService) {
+    public SensorService(UnitValueRepositoryImpl unitValueRepository, NodeService nodeService) {
         this.unitValueRepository = unitValueRepository;
         this.nodeService = nodeService;
     }

@@ -1,61 +1,62 @@
-package internal.scheduler.service;
+package internal.scheduler.periodic;
 
 import internal.scheduler.condition.ICondition;
 import internal.scheduler.task.ITask;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAmount;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
+
 public class PeriodicTask {
 
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     private ScheduledFuture scheduledFuture;
 
-    private final ICondition iCondition;
+    private final List<ICondition> iConditions;
 
-    private final ITask iTask;
+    private final List<ITask> iTasks;
 
     private LocalDateTime targetTime;
 
     private TemporalAmount increment;
 
-    public PeriodicTask(ITask iTask, LocalDateTime targetTime) {
-        this.iTask = iTask;
+    public PeriodicTask(List<ITask> iTasks, LocalDateTime targetTime) {
+        this.iTasks = iTasks;
         this.targetTime = targetTime;
-        this.iCondition = () -> true;
-        startExecution();
+        this.iConditions = List.of(() -> true);
     }
 
-    public PeriodicTask(ITask iTask, ICondition iCondition, LocalDateTime targetTime) {
-        this.iTask = iTask;
-        this.iCondition = iCondition;
+    public PeriodicTask(List<ITask> iTasks, List<ICondition> iConditions, LocalDateTime targetTime) {
+        this.iTasks = iTasks;
+        this.iConditions = iConditions;
         this.targetTime = targetTime;
-        startExecution();
     }
 
-    public PeriodicTask(ITask iTask, ICondition iCondition, LocalDateTime targetTime, TemporalAmount increment) {
-        this.iTask = iTask;
-        this.iCondition = iCondition;
+    public PeriodicTask(List<ITask> iTasks, List<ICondition> iConditions, LocalDateTime targetTime, TemporalAmount increment) {
+        this.iTasks = iTasks;
+        this.iConditions = iConditions;
         this.targetTime = targetTime;
         this.increment = increment;
-        startExecution();
     }
 
+    @PostConstruct
     public void startExecution() {
         Runnable taskWrapper = () -> {
-            if (iCondition.test()) {
-                iTask.run();
+            if (iConditions.stream().allMatch(ICondition::test)) {
+                iTasks.forEach(ITask::run);
             }
             startExecution();
         };

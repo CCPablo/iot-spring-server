@@ -1,4 +1,4 @@
-package internal.scheduler.service;
+package internal.scheduler.periodic;
 
 import internal.scheduler.condition.ICondition;
 import internal.scheduler.task.ITask;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -17,13 +18,13 @@ public class PeriodicTaskService {
 
     public void addNewPeriodicTask(String taskName, ITask iTask, LocalDateTime targetTime) {
         if (!activePeriodicTasks.containsKey(taskName)) {
-            activePeriodicTasks.put(taskName, new PeriodicTask(iTask, targetTime));
+            activePeriodicTasks.put(taskName, new PeriodicTask(List.of(iTask), targetTime));
         }
     }
 
-    public void addNewPeriodicTaskDate(String taskName, ITask iTask, ICondition iCondition, LocalDateTime targetTime) {
+    public void addNewPeriodicTask(String taskName, ITask iTask, ICondition iCondition, LocalDateTime targetTime) {
         if (!activePeriodicTasks.containsKey(taskName)) {
-            activePeriodicTasks.put(taskName, new PeriodicTask(iTask, iCondition, targetTime));
+            activePeriodicTasks.put(taskName, new PeriodicTask(List.of(iTask), List.of(iCondition), targetTime));
         }
     }
 

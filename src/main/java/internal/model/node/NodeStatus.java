@@ -1,10 +1,10 @@
-package internal.model.device;
+package internal.model.node;
 
 import internal.model.StatusType;
 import lombok.Data;
 
 @Data
-public class DeviceStatus {
+public class NodeStatus {
 
     private Integer id;
 

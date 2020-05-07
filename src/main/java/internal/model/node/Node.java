@@ -1,4 +1,4 @@
-package internal.model.device;
+package internal.model.node;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -10,11 +10,11 @@ import lombok.Value;
 
 import java.util.List;
 
-@JsonDeserialize(builder = Device.DeviceBuilder.class)
+@JsonDeserialize(builder = Node.NodeBuilder.class)
 @Value
 @RequiredArgsConstructor
 @Builder
-public class Device {
+public class Node {
 
     Integer id;
 
@@ -31,6 +31,6 @@ public class Device {
     List<Unit> units;
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static class DeviceBuilder {
+    public static class NodeBuilder {
     }
 }

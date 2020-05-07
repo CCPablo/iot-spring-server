@@ -10,9 +10,9 @@ public interface UnitValueRepository {
 
     List<UnitValue> findAll();
 
-    List<UnitValue> findAllByUnitId(Integer deviceId, Integer unitId);
+    List<UnitValue> findAllByUnitId(Integer nodeId, Integer unitId);
 
-    UnitValue findFirstByUnitId(Integer deviceId, Integer unitId);
+    UnitValue findFirstByUnitId(Integer nodeId, Integer unitId);
 
     void deleteAll();
 }

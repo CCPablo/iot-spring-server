@@ -9,23 +9,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CommuteTask implements ITask {
 
-    private Integer deviceId;
+    private Integer nodeId;
 
     private Integer actuatorId;
 
     private StatusType actuatorStatus;
 
-    public CommuteTask(Integer deviceId, Integer actuatorId, StatusType actuatorStatus) {
-        this.deviceId = deviceId;
+    public CommuteTask(Integer nodeId, Integer actuatorId, StatusType actuatorStatus) {
+        this.nodeId = nodeId;
         this.actuatorId = actuatorId;
         this.actuatorStatus = actuatorStatus;
     }
 
-    public String toString() {
-        return "Task commutated";
-    }
-
     @Override
     public void run() {
+        log.info("Commutation Task Executed");
     }
 }

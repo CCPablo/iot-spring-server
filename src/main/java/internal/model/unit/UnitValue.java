@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UnitValue {
 
-    private Integer deviceId;
+    private Integer nodeId;
 
     private Integer unitId;
 
@@ -13,8 +13,8 @@ public class UnitValue {
 
     private Long timestamp;
 
-    public UnitValue(Integer deviceId, Integer unitId, Long value) {
-        this.deviceId = deviceId;
+    public UnitValue(Integer nodeId, Integer unitId, Long value) {
+        this.nodeId = nodeId;
         this.unitId = unitId;
         this.value = value;
         this.timestamp = System.currentTimeMillis();
