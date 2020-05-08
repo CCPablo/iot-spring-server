@@ -1,9 +1,9 @@
 package internal.scheduler.trigger;
 
+import internal.service.NodeService;
 import internal.service.SensorService;
-import org.springframework.stereotype.Component;
+import internal.util.BeanUtil;
 
-@Component
 public class SensorTrigger extends ATrigger {
 
     private final SensorService sensorService;
@@ -12,9 +12,9 @@ public class SensorTrigger extends ATrigger {
 
     long below;
 
-    protected SensorTrigger(Integer nodeId, Integer unitId, SensorService sensorService) {
+    protected SensorTrigger(Integer nodeId, Integer unitId) {
         super(nodeId, unitId);
-        this.sensorService = sensorService;
+        this.sensorService = BeanUtil.getBean(SensorService.class);
     }
 
     @Override

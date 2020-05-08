@@ -4,7 +4,6 @@ import internal.model.unit.UnitValue;
 import internal.mqtt.GatewayClient;
 import internal.mqtt.listener.exception.ComponentNotRegisteredException;
 import internal.mqtt.publisher.GatewayConnectMsg;
-import internal.service.NodeService;
 import internal.mqtt.topic.TopicsToPub;
 import internal.repository.implementation.UnitValueRepositoryImpl;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class SensorService {
 
     public long getMeanValue(Integer nodeId, Integer unitId) {
         Map<Integer, LinkedList<UnitValue>> valuesOfNode = cachedValues.get(nodeId);
-        if (valuesOfNode.isEmpty() || !unitCached(unitId, valuesOfNode)) {
+        if (valuesOfNode.isEmpty() || !isUnitCached(unitId, valuesOfNode)) {
             return -1;
         } else {
             Queue<UnitValue> unitValues = cachedValues.get(nodeId).get(unitId);
@@ -49,7 +48,7 @@ public class SensorService {
             newList.add(value);
             cachedValues.put(value.getNodeId(), new HashMap<>(Map.of(value.getUnitId(), newList)));
             unitValueRepository.addUnitValue(value);
-        } else if (!unitCached(value.getUnitId(), valuesOfNode)) {
+        } else if (!isUnitCached(value.getUnitId(), valuesOfNode)) {
             LinkedList<UnitValue> newList = new LinkedList<>();
             newList.add(value);
             cachedValues.get(value.getNodeId()).put(value.getUnitId(), newList);
@@ -65,7 +64,7 @@ public class SensorService {
         }
     }
 
-    private boolean unitCached(Integer unitId, Map<Integer, LinkedList<UnitValue>> valuesOfNode) {
+    private boolean isUnitCached(Integer unitId, Map<Integer, LinkedList<UnitValue>> valuesOfNode) {
         return valuesOfNode.keySet().stream().anyMatch(unitId::equals);
     }
 }

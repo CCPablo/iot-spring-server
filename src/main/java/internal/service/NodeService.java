@@ -32,9 +32,8 @@ public class NodeService {
         cachedNodes.putIfAbsent(node.getId(), node);
     }
 
-    public void addNewNode(Integer nodeId, StatusType statusType, String name, String description,
-                             Long connectedSince, List<Unit> units) {
-        Node node = getNodeObject(nodeId, statusType, name, description, connectedSince, units);
+    public void addNewNode(Integer nodeId, StatusType statusType, String name, String description, List<Unit> units) {
+        Node node = newNode(nodeId, statusType, name, description, units);
         cachedNodes.putIfAbsent(node.getId(), node);
     }
 
@@ -42,7 +41,7 @@ public class NodeService {
     }
 
     public void addNewNode(Integer nodeId, String name, String description, List<Unit> units) {
-        Node node = getNodeObject(nodeId, StatusType.OFF, name, description, currentTimeMillis(), units);
+        Node node = newNode(nodeId, StatusType.OFF, name, description,  units);
 
         cachedNodes.putIfAbsent(nodeId, node);
     }
@@ -73,8 +72,7 @@ public class NodeService {
         return cachedNodes.getOrDefault(nodeId, Node.builder().status(StatusType.OFF).build()).getStatus().equals(StatusType.ON);
     }
 
-    private Node getNodeObject(Integer nodeId, StatusType statusType, String name, String description,
-                                 Long connectedSince, List<Unit> units) {
+    private Node newNode(Integer nodeId, StatusType statusType, String name, String description, List<Unit> units) {
         return Node.builder()
                 .status(statusType)
                 .name(name)
