@@ -1,13 +1,10 @@
-package internal.scheduler.task;
+package internal.scheduler.action;
 
-import internal.mqtt.GatewayClient;
 import internal.model.StatusType;
-import internal.mqtt.publisher.ActuatorValueMsg;
-import internal.mqtt.topic.TopicsToPub;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CommuteTask implements ITask {
+public class CommuteAction implements IAction {
 
     private Integer nodeId;
 
@@ -15,7 +12,7 @@ public class CommuteTask implements ITask {
 
     private StatusType actuatorStatus;
 
-    public CommuteTask(Integer nodeId, Integer actuatorId, StatusType actuatorStatus) {
+    public CommuteAction(Integer nodeId, Integer actuatorId, StatusType actuatorStatus) {
         this.nodeId = nodeId;
         this.actuatorId = actuatorId;
         this.actuatorStatus = actuatorStatus;

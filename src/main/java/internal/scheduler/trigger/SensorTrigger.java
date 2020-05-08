@@ -1,10 +1,17 @@
 package internal.scheduler.trigger;
 
-public class SensorTrigger {
+public class SensorTrigger extends ITrigger {
 
-    Integer sensorId;
+    long above;
 
-    Integer valueAbove;
+    long below;
 
-    Integer valueBelow;
+    protected SensorTrigger(Integer nodeId, Integer unitId) {
+        super(nodeId, unitId);
+    }
+
+    @Override
+    public boolean test() {
+        return false;
+    }
 }

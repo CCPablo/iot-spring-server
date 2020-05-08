@@ -17,7 +17,7 @@ public class NodeService {
 
     final private NodeRepository nodeRepository;
 
-    private final Map<Integer, Node> cachedNodes = new ConcurrentHashMap<>();
+    private static final Map<Integer, Node> cachedNodes = new ConcurrentHashMap<>();
 
     public NodeService(NodeRepository nodeRepository) {
         this.nodeRepository = nodeRepository;
@@ -56,7 +56,7 @@ public class NodeService {
         nodeRepository.updateNode(node);
     }
 
-    public boolean isUnitPresent(Integer nodeId, Integer unitId) {
+    static public boolean isUnitPresent(Integer nodeId, Integer unitId) {
         return cachedNodes.containsKey(nodeId) && cachedNodes.get(nodeId).getUnits().stream().anyMatch(unit -> unitId.equals(unit.getId()));
     }
 

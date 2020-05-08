@@ -1,7 +1,7 @@
-package internal.scheduler.periodic;
+package internal.scheduler.task;
 
 import internal.scheduler.condition.ICondition;
-import internal.scheduler.task.ITask;
+import internal.scheduler.action.IAction;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
@@ -27,26 +27,26 @@ public class PeriodicTask {
 
     private final List<ICondition> iConditions;
 
-    private final List<ITask> iTasks;
+    private final List<IAction> IActions;
 
     private LocalDateTime targetTime;
 
     private TemporalAmount increment;
 
-    public PeriodicTask(List<ITask> iTasks, LocalDateTime targetTime) {
-        this.iTasks = iTasks;
+    public PeriodicTask(List<IAction> IActions, LocalDateTime targetTime) {
+        this.IActions = IActions;
         this.targetTime = targetTime;
         this.iConditions = List.of(() -> true);
     }
 
-    public PeriodicTask(List<ITask> iTasks, List<ICondition> iConditions, LocalDateTime targetTime) {
-        this.iTasks = iTasks;
+    public PeriodicTask(List<IAction> IActions, List<ICondition> iConditions, LocalDateTime targetTime) {
+        this.IActions = IActions;
         this.iConditions = iConditions;
         this.targetTime = targetTime;
     }
 
-    public PeriodicTask(List<ITask> iTasks, List<ICondition> iConditions, LocalDateTime targetTime, TemporalAmount increment) {
-        this.iTasks = iTasks;
+    public PeriodicTask(List<IAction> IActions, List<ICondition> iConditions, LocalDateTime targetTime, TemporalAmount increment) {
+        this.IActions = IActions;
         this.iConditions = iConditions;
         this.targetTime = targetTime;
         this.increment = increment;
@@ -56,7 +56,7 @@ public class PeriodicTask {
     public void startExecution() {
         Runnable taskWrapper = () -> {
             if (iConditions.stream().allMatch(ICondition::test)) {
-                iTasks.forEach(ITask::run);
+                IActions.forEach(IAction::run);
             }
             startExecution();
         };
