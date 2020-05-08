@@ -2,7 +2,7 @@ package internal.mqtt.listener.processor;
 
 import internal.model.node.Node;
 import internal.mqtt.listener.mapper.JsonMapper;
-import internal.mqtt.service.NodeService;
+import internal.service.NodeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttMessage;

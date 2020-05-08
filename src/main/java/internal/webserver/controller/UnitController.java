@@ -1,6 +1,6 @@
 package internal.webserver.controller;
 
-import internal.mqtt.service.NodeService;
+import internal.service.NodeService;
 import internal.webserver.service.UnitControllerService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;

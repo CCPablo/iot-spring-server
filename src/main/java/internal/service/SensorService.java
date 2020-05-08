@@ -1,16 +1,18 @@
-package internal.mqtt.listener.service;
+package internal.service;
 
 import internal.model.unit.UnitValue;
 import internal.mqtt.GatewayClient;
 import internal.mqtt.listener.exception.ComponentNotRegisteredException;
 import internal.mqtt.publisher.GatewayConnectMsg;
-import internal.mqtt.service.NodeService;
+import internal.service.NodeService;
 import internal.mqtt.topic.TopicsToPub;
 import internal.repository.implementation.UnitValueRepositoryImpl;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Service
 public class SensorService {
 
     private final UnitValueRepositoryImpl unitValueRepository;
@@ -35,7 +37,7 @@ public class SensorService {
     }
 
     public void addValue(UnitValue value) {
-        if (!NodeService.isUnitPresent(value.getNodeId(), value.getUnitId())) {
+        if (!nodeService.isUnitPresent(value.getNodeId(), value.getUnitId())) {
             GatewayClient.publishMessage(new GatewayConnectMsg(true), TopicsToPub.GATEWAY_CONNECT_TOPIC);
             throw new ComponentNotRegisteredException();
         }

@@ -1,15 +1,17 @@
 package internal.scheduler.trigger;
 
-import internal.mqtt.service.NodeService;
+import internal.service.NodeService;
+import internal.util.BeanUtil;
 
-public abstract class ITrigger {
+public abstract class ATrigger {
 
-    private final Integer nodeId;
+    protected final Integer nodeId;
 
-    private final Integer unitId;
+    protected final Integer unitId;
 
-    protected ITrigger(Integer nodeId, Integer unitId) {
-        if (!NodeService.isUnitPresent(nodeId, unitId)) {
+    protected ATrigger(Integer nodeId, Integer unitId) {
+        NodeService nodeService = BeanUtil.getBean(NodeService.class);
+        if (!nodeService.isUnitPresent(nodeId, unitId)) {
             throw new ExceptionInInitializerError();
         }
         this.nodeId = nodeId;

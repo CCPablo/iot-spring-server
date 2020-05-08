@@ -1,7 +1,7 @@
 package internal.scheduler.condition;
 
 import internal.model.StatusType;
-import internal.mqtt.service.NodeService;
+import internal.service.NodeService;
 
 public class UnitCondition implements ICondition {
 

@@ -2,20 +2,20 @@ package internal.scheduler.task;
 
 import internal.scheduler.condition.ICondition;
 import internal.scheduler.action.IAction;
-import internal.scheduler.trigger.ITrigger;
+import internal.scheduler.trigger.ATrigger;
 
 import java.util.List;
 
 public class TriggeredTask {
 
-    private final List<ITrigger> iTriggers;
+    private final List<ATrigger> aTriggers;
 
     private final List<ICondition> iConditions;
 
     private final List<IAction> IActions;
 
-    public TriggeredTask(List<ITrigger> iTriggers, List<ICondition> iConditions, List<IAction> IActions) {
-        this.iTriggers = iTriggers;
+    public TriggeredTask(List<ATrigger> aTriggers, List<ICondition> iConditions, List<IAction> IActions) {
+        this.aTriggers = aTriggers;
         this.iConditions = iConditions;
         this.IActions = IActions;
     }
@@ -29,6 +29,6 @@ public class TriggeredTask {
     }
 
     private boolean needToRun() {
-        return iTriggers.stream().anyMatch(ITrigger::test) && iConditions.stream().allMatch(ICondition::test);
+        return aTriggers.stream().anyMatch(ATrigger::test) && iConditions.stream().allMatch(ICondition::test);
     }
 }

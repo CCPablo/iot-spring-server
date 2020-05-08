@@ -1,7 +1,7 @@
 package internal.webserver.controller;
 
 
-import internal.mqtt.service.NodeService;
+import internal.service.NodeService;
 import internal.model.node.Node;
 import internal.model.unit.Unit;
 import io.swagger.annotations.Api;

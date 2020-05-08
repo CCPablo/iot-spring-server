@@ -1,4 +1,4 @@
-package internal.mqtt.service;
+package internal.service;
 
 import internal.model.node.Node;
 import internal.model.StatusType;
@@ -17,7 +17,7 @@ public class NodeService {
 
     final private NodeRepository nodeRepository;
 
-    private static final Map<Integer, Node> cachedNodes = new ConcurrentHashMap<>();
+    private final Map<Integer, Node> cachedNodes = new ConcurrentHashMap<>();
 
     public NodeService(NodeRepository nodeRepository) {
         this.nodeRepository = nodeRepository;
@@ -56,8 +56,9 @@ public class NodeService {
         nodeRepository.updateNode(node);
     }
 
-    static public boolean isUnitPresent(Integer nodeId, Integer unitId) {
-        return cachedNodes.containsKey(nodeId) && cachedNodes.get(nodeId).getUnits().stream().anyMatch(unit -> unitId.equals(unit.getId()));
+    public boolean isUnitPresent(Integer nodeId, Integer unitId) {
+        Node node = getNode(nodeId);
+        return node != null && node.getUnits().stream().anyMatch(unit -> unitId.equals(unit.getId()));
     }
 
     public Node getNode(Integer id) {

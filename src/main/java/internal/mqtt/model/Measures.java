@@ -1,4 +1,4 @@
-package internal.mqtt.service.model;
+package internal.mqtt.model;
 
 import internal.model.unit.UnitValue;
 import lombok.Builder;
