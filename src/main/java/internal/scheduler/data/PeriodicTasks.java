@@ -1,4 +1,4 @@
-package internal.scheduler.service;
+package internal.scheduler.data;
 
 import internal.scheduler.condition.ICondition;
 import internal.scheduler.action.IAction;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class PeriodicTaskService {
+public class PeriodicTasks {
 
     private final Map<String, PeriodicTask> activePeriodicTasks = new HashMap<>();
 

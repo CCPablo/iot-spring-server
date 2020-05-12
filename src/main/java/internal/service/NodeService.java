@@ -10,12 +10,10 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.lang.System.currentTimeMillis;
-
 @Service
 public class NodeService {
 
-    final private NodeRepository nodeRepository;
+    private final NodeRepository nodeRepository;
 
     private final Map<Integer, Node> cachedNodes = new ConcurrentHashMap<>();
 
@@ -33,7 +31,7 @@ public class NodeService {
     }
 
     public void addNewNode(Integer nodeId, StatusType statusType, String name, String description, List<Unit> units) {
-        Node node = newNode(nodeId, statusType, name, description, units);
+        Node node = Node(nodeId, statusType, name, description, units);
         cachedNodes.putIfAbsent(node.getId(), node);
     }
 
@@ -41,7 +39,7 @@ public class NodeService {
     }
 
     public void addNewNode(Integer nodeId, String name, String description, List<Unit> units) {
-        Node node = newNode(nodeId, StatusType.OFF, name, description,  units);
+        Node node = Node(nodeId, StatusType.OFF, name, description,  units);
 
         cachedNodes.putIfAbsent(nodeId, node);
     }
@@ -72,7 +70,7 @@ public class NodeService {
         return cachedNodes.getOrDefault(nodeId, Node.builder().status(StatusType.OFF).build()).getStatus().equals(StatusType.ON);
     }
 
-    private Node newNode(Integer nodeId, StatusType statusType, String name, String description, List<Unit> units) {
+    private Node Node(Integer nodeId, StatusType statusType, String name, String description, List<Unit> units) {
         return Node.builder()
                 .status(statusType)
                 .name(name)

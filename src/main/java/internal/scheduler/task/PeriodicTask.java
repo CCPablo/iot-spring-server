@@ -12,13 +12,13 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAmount;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-
 public class PeriodicTask {
 
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
@@ -33,9 +33,12 @@ public class PeriodicTask {
 
     private TemporalAmount increment;
 
+    private final String id;
+
     public PeriodicTask(List<IAction> IActions, LocalDateTime targetTime) {
         this.IActions = IActions;
         this.targetTime = targetTime;
+        this.id = UUID.randomUUID().toString();
         this.iConditions = List.of(() -> true);
     }
 
@@ -43,6 +46,7 @@ public class PeriodicTask {
         this.IActions = IActions;
         this.iConditions = iConditions;
         this.targetTime = targetTime;
+        this.id = UUID.randomUUID().toString();
     }
 
     public PeriodicTask(List<IAction> IActions, List<ICondition> iConditions, LocalDateTime targetTime, TemporalAmount increment) {
@@ -50,10 +54,11 @@ public class PeriodicTask {
         this.iConditions = iConditions;
         this.targetTime = targetTime;
         this.increment = increment;
+        this.id = UUID.randomUUID().toString();
     }
 
     @PostConstruct
-    public void startExecution() {
+    public void startExecutionAndStore() {
         Runnable taskWrapper = () -> {
             if (iConditions.stream().allMatch(ICondition::test)) {
                 IActions.forEach(IAction::run);
@@ -79,8 +84,18 @@ public class PeriodicTask {
         }
     }
 
+    private void startExecution() {
+        Runnable taskWrapper = () -> {
+            if (iConditions.stream().allMatch(ICondition::test)) {
+                IActions.forEach(IAction::run);
+            }
+            startExecution();
+        };
+        scheduledFuture = executorService.schedule(taskWrapper, computeNextDelay(), TimeUnit.SECONDS);
+    }
+
     private long computeNextDelay() {
-        ZonedDateTime zonedNow = ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault());
+        final ZonedDateTime zonedNow = ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault());
         ZonedDateTime zonedNextTarget =
                 zonedNow.withHour(targetTime.getHour()).withMinute(targetTime.getMinute()).withSecond(targetTime.getSecond())
                         .truncatedTo(ChronoUnit.SECONDS);
