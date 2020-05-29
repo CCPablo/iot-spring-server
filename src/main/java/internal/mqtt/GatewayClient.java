@@ -5,6 +5,7 @@ import internal.mqtt.listener.exception.InvalidSensorValueException;
 import internal.mqtt.listener.mapper.JsonMapper;
 import internal.mqtt.listener.mapper.ProcessorMapper;
 import internal.mqtt.persistence.PersistenceClient;
+import internal.mqtt.publisher.ActuatorValueMsg;
 import internal.mqtt.publisher.GatewayConnectMsg;
 import internal.mqtt.topic.TopicsToPub;
 import internal.mqtt.topic.TopicsToSub;
@@ -91,10 +92,9 @@ public class GatewayClient implements MqttCallbackExtended {
         try {
             processorMapper.getMsgProcessor(topic).process(message);
         } catch (ComponentNotRegisteredException e) {
-
             log.error("No such component exception");
         } catch (InvalidSensorValueException e) {
-            log.error("No such component exception");
+            log.error("Invalid Sensor Value");
         }
     }
 
@@ -117,5 +117,9 @@ public class GatewayClient implements MqttCallbackExtended {
 
     public static void publishConnectionMessage(Boolean connected) {
         publishMessage(new GatewayConnectMsg(connected), TopicsToPub.GATEWAY_CONNECT_TOPIC);
+    }
+
+    public static void publishUnitValueMessage(Integer nodeId, Integer unitId, Long value) {
+        publishMessage(new ActuatorValueMsg(nodeId, unitId, value), TopicsToPub.UNIT_VALUE_TOPIC);
     }
 }

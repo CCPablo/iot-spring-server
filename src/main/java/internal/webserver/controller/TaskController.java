@@ -1,8 +1,7 @@
 package internal.webserver.controller;
 
-import internal.model.StatusType;
-import internal.scheduler.action.CommuteAction;
-import internal.scheduler.data.PeriodicTasks;
+import internal.scheduler.action.SetValueAction;
+import internal.scheduler.store.PeriodicTasks;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,9 @@ public class TaskController {
     private final PeriodicTasks periodicTasks;
 
     @PostMapping(value = "/task/create")
-    public void addNewTask(@RequestParam String name, @RequestParam Integer nodeId, @RequestParam Integer actuatorId, @RequestParam Integer minute) {
-        CommuteAction commuteAction = new CommuteAction(nodeId, actuatorId, StatusType.ON);
-        periodicTasks.addNewPeriodicTask(name, commuteAction, LocalDateTime.of(2020, 4, 2, 0, minute, 0));
+    public void addNewTask(@RequestParam String name, @RequestParam Integer nodeId, @RequestParam Integer actuatorId, @RequestParam Long value, @RequestParam Integer seconds) {
+        SetValueAction setValueAction = new SetValueAction(nodeId, actuatorId, value);
+        periodicTasks.addNewPeriodicTask(name, setValueAction, LocalDateTime.now().plusSeconds(seconds));
     }
 
     @PostMapping(value = "/task/remove")

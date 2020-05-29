@@ -1,4 +1,4 @@
-package internal.scheduler.data;
+package internal.scheduler.store;
 
 import internal.scheduler.action.IAction;
 import internal.scheduler.condition.ICondition;

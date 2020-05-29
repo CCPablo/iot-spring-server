@@ -1,4 +1,4 @@
-package internal.scheduler.data;
+package internal.scheduler.store;
 
 import internal.scheduler.condition.ICondition;
 import internal.scheduler.action.IAction;
@@ -15,25 +15,25 @@ import java.util.Map;
 @Service
 public class PeriodicTasks {
 
-    private final Map<String, PeriodicTask> activePeriodicTasks = new HashMap<>();
+    private final Map<String, PeriodicTask> periodicTasks = new HashMap<>();
 
     public void addNewPeriodicTask(String taskName, IAction iAction, LocalDateTime targetTime) {
-        if (!activePeriodicTasks.containsKey(taskName)) {
-            activePeriodicTasks.put(taskName, new PeriodicTask(List.of(iAction), targetTime));
+        if (!periodicTasks.containsKey(taskName)) {
+            periodicTasks.put(taskName, new PeriodicTask(List.of(iAction), targetTime));
         }
     }
 
     public void addNewPeriodicTask(String taskName, IAction iAction, ICondition iCondition, LocalDateTime targetTime) {
-        if (!activePeriodicTasks.containsKey(taskName)) {
-            activePeriodicTasks.put(taskName, new PeriodicTask(List.of(iAction), List.of(iCondition), targetTime));
+        if (!periodicTasks.containsKey(taskName)) {
+            periodicTasks.put(taskName, new PeriodicTask(List.of(iAction), List.of(iCondition), targetTime));
         }
     }
 
     public void removePeriodicTask(String taskName) {
-        if (activePeriodicTasks.containsKey(taskName)) {
-            PeriodicTask periodicTask = activePeriodicTasks.get(taskName);
+        if (periodicTasks.containsKey(taskName)) {
+            PeriodicTask periodicTask = periodicTasks.get(taskName);
             periodicTask.stop();
-            activePeriodicTasks.remove(taskName, periodicTask);
+            periodicTasks.remove(taskName, periodicTask);
         }
     }
 }
