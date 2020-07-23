@@ -1,4 +1,4 @@
-package internal.webserver.controller;
+package internal.webserver.rest;
 
 import internal.service.NodeService;
 import internal.webserver.service.UnitControllerService;

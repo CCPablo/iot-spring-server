@@ -1,4 +1,4 @@
-package internal.webserver.controller;
+package internal.webserver.rest;
 
 
 import internal.repository.model.ApplicationUser;
@@ -32,8 +32,8 @@ public class UserController {
     @PostMapping(value = "/add")
     @ResponseStatus(HttpStatus.OK)
     public void addUser(@RequestParam String name, @RequestParam String password) {
-        String encodedPassword = passwordEncoder.encode(password);
-        userService.addUser(name, encodedPassword);
+        //String encodedPassword = passwordEncoder.encode(password);
+        userService.addUser(name, password);
     }
 
     @PutMapping(value = "/remove")

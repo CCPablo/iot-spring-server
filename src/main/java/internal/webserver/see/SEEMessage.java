@@ -1,4 +1,4 @@
-package internal.webserver.controller;
+package internal.webserver.see;
 
 import lombok.Builder;
 import lombok.Data;

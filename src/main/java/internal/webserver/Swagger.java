@@ -8,6 +8,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.time.Clock;
+
 @Configuration
 @EnableSwagger2
 public class Swagger {
@@ -18,5 +20,10 @@ public class Swagger {
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
+    }
+
+    @Bean
+    public Clock clock() { // <--Note the method name will change the bean ID
+        return Clock.systemUTC();
     }
 }

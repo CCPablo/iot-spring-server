@@ -41,7 +41,11 @@ public class NodeService {
     public void addNewNode(Integer nodeId, String name, String description, List<Unit> units) {
         Node node = Node(nodeId, StatusType.OFF, name, description,  units);
 
-        cachedNodes.putIfAbsent(nodeId, node);
+        if(!cachedNodes.containsKey(nodeId)){
+            Node node1 = cachedNodes.putIfAbsent(nodeId, node);
+        }
+
+        nodeRepository.saveNode(node);
     }
 
     public List<Node> getAllNodes() {

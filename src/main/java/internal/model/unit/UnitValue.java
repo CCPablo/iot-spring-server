@@ -1,8 +1,13 @@
 package internal.model.unit;
 
+import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@Builder
+@Document(collection = "unitValues")
 public class UnitValue {
 
     private Integer nodeId;
@@ -11,12 +16,7 @@ public class UnitValue {
 
     private Long value;
 
+    @Indexed
     private Long timestamp;
 
-    public UnitValue(Integer nodeId, Integer unitId, Long value) {
-        this.nodeId = nodeId;
-        this.unitId = unitId;
-        this.value = value;
-        this.timestamp = System.currentTimeMillis();
-    }
 }

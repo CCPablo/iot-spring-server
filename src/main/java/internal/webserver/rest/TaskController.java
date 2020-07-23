@@ -1,4 +1,4 @@
-package internal.webserver.controller;
+package internal.webserver.rest;
 
 import internal.scheduler.action.SetValueAction;
 import internal.scheduler.store.PeriodicTasks;

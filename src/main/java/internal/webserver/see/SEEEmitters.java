@@ -1,7 +1,6 @@
-package internal.webserver.controller;
+package internal.webserver.see;
 
 import internal.mqtt.listener.mapper.JsonMapper;
-import org.apache.tomcat.util.collections.SynchronizedQueue;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -17,7 +16,7 @@ public class SEEEmitters {
 
     private static final List<SseEmitter> emitters = Collections.synchronizedList(new ArrayList<>());
 
-    void add(SseEmitter emitter) throws IOException {
+    public void add(SseEmitter emitter) throws IOException {
         emitters.add(emitter);
 
         emitter.onCompletion(() -> {

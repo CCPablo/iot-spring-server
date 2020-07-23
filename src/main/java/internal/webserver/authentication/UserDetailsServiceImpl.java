@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static java.util.Collections.emptyList;
@@ -14,8 +15,11 @@ import static java.util.Collections.emptyList;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepositoryImpl applicationUserRepository;
 
-    public UserDetailsServiceImpl(UserRepositoryImpl applicationUserRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserDetailsServiceImpl(UserRepositoryImpl applicationUserRepository, PasswordEncoder passwordEncoder) {
         this.applicationUserRepository = applicationUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -24,6 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (applicationUser == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(applicationUser.getName(), applicationUser.getPassword(), emptyList());
+        return new User(applicationUser.getName(), passwordEncoder.encode(applicationUser.getPassword()), emptyList());
     }
 }

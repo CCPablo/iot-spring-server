@@ -1,14 +1,16 @@
 package internal.repository.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.bson.codecs.pojo.annotations.BsonId;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Builder
 @Data
+@CompoundIndexes({
+        @CompoundIndex(name = "email_age", def = "{'name' : 1, 'userId': 1}")
+})
 @Document(collection = "users")
 public class ApplicationUser {
 
@@ -18,7 +20,7 @@ public class ApplicationUser {
 
     private String password;
 
-    private Long timeStamp;
+    private Long timestamp;
 
     @Override
     public String toString() {

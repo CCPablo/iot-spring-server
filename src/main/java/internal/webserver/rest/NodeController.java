@@ -1,4 +1,4 @@
-package internal.webserver.controller;
+package internal.webserver.rest;
 
 
 import internal.service.NodeService;
@@ -37,7 +37,7 @@ public class NodeController {
     }
 
     @PostMapping(value = "/nodes/{id}/update")
-    public String addNewNode(@RequestParam String name, String description, @RequestBody List<Unit> units) {
+    public String updateNode(@RequestParam String name, String description, @RequestBody List<Unit> units) {
         nodeService.addNewNode(name, description, units);
         return "OK";
     }

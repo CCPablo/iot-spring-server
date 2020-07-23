@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 public class UnitControllerService {
 
     public void updateActuatorValue(Integer nodeId, Integer unitId, Long value) {
-        GatewayClient.publishMessage(new UnitValue(nodeId, unitId, value), TopicsToPub.UNIT_VALUE_TOPIC);
+        GatewayClient.publishMessage(UnitValue.builder().nodeId(nodeId).unitId(unitId).value(value).build(), TopicsToPub.UNIT_VALUE_TOPIC);
     }
 }

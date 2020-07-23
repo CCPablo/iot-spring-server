@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static java.util.Arrays.stream;
 
@@ -105,7 +106,7 @@ public class GatewayClient implements MqttCallbackExtended {
 
     public static <T> void publishMessage(T t, TopicsToPub topicsToPub) {
         MqttMessage message = new MqttMessage();
-        message.setPayload(JsonMapper.getSerializedMessage(t).getBytes(StandardCharsets.UTF_8));
+        message.setPayload(Objects.requireNonNull(JsonMapper.getSerializedMessage(t)).getBytes(StandardCharsets.UTF_8));
 
         try {
             log.info(String.format("Publishing message: %s in topic %s", Arrays.toString(message.getPayload()), topicsToPub.getTopic()));

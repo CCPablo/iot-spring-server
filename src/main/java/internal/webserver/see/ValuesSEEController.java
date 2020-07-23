@@ -1,4 +1,4 @@
-package internal.webserver.controller;
+package internal.webserver.see;
 import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -8,11 +8,11 @@ import java.io.IOException;
 
 @RestController("/v1/api/values")
 @Api(value = "Values REST Endpoint")
-public class ValuesController {
+public class ValuesSEEController {
 
     private final SEEEmitters emitters;
 
-    public ValuesController(SEEEmitters emitters){
+    public ValuesSEEController(SEEEmitters emitters){
         this.emitters = emitters;
     }
 
