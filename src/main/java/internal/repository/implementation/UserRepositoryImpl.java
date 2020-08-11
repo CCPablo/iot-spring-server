@@ -1,30 +1,50 @@
 package internal.repository.implementation;
 
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.UpdateResult;
 import internal.repository.UserRepository;
 import internal.repository.model.ApplicationUser;
+import internal.service.NodeService;
+import internal.util.BeanUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldNameConstants;
+import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
     private final MongoTemplate mongoTemplate;
 
+    private final ApplicationContext applicationContext;
+
     private final String COLLECTION_NAME = "users";
+
+    private MongoCollection<ApplicationUser> mongoCollection;
 
     @PostConstruct
     private void init() {
-        //mongoTemplate.createCollection(COLLECTION_NAME);
+        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+
+        mongoCollection = mongoTemplate.getCollection(COLLECTION_NAME).withDocumentClass(ApplicationUser.class).withCodecRegistry(pojoCodecRegistry);
     }
 
     @Override
@@ -34,12 +54,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteAll() {
-        mongoTemplate.remove(ApplicationUser.class, COLLECTION_NAME);
+        mongoCollection.drop();
     }
 
     @Override
     public void saveUser(ApplicationUser applicationUser) {
-        mongoTemplate.save(applicationUser, COLLECTION_NAME);
+        mongoCollection.insertOne(applicationUser);
     }
 
     @Override

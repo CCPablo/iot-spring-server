@@ -32,8 +32,8 @@ public class UserController {
     @PostMapping(value = "/add")
     @ResponseStatus(HttpStatus.OK)
     public void addUser(@RequestParam String name, @RequestParam String password) {
-        //String encodedPassword = passwordEncoder.encode(password);
-        userService.addUser(name, password);
+        String encodedPassword = passwordEncoder.encode(password);
+        userService.addUser(name, encodedPassword);
     }
 
     @PutMapping(value = "/remove")

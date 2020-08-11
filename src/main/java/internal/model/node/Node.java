@@ -2,6 +2,7 @@ package internal.model.node;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import internal.model.LocationType;
 import internal.model.StatusType;
 import internal.model.unit.Unit;
 import lombok.Builder;
@@ -21,6 +22,8 @@ public class Node {
     String name;
 
     String description;
+
+    LocationType location;
 
     String connectedSince;
 

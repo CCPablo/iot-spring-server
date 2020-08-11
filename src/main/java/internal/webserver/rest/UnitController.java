@@ -5,7 +5,7 @@ import internal.webserver.service.UnitControllerService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/v1/api/actuator")
+@RestController("/v1/api/")
 @Api(value = "Noded Resource REST Endpoint")
 public class UnitController {
 

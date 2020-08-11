@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/v1/api")
+@RestController("/v1/api/nodes")
 @Api(value = "Nodes Resource REST Endpoint")
 public class NodeController {
 

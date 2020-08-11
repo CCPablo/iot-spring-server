@@ -8,9 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Builder
 @Data
+/*
 @CompoundIndexes({
         @CompoundIndex(name = "email_age", def = "{'name' : 1, 'userId': 1}")
 })
+*/
 @Document(collection = "users")
 public class ApplicationUser {
 
