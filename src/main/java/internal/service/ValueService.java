@@ -7,7 +7,6 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,46 +39,53 @@ public class ValueService {
         }
     }
 
-    public List<Pair<Long, Long>> getIntervalValuesArray(Integer nodeId, Integer unitId, Long intervalDuration, Integer numberOfIntervals) {
-        List<List<Long>> intervalFullValuesArray = getIntervalFullValuesArray(nodeId, unitId, intervalDuration, numberOfIntervals, clock.instant().toEpochMilli());
-        return getIntervalValuesArray(intervalFullValuesArray, intervalDuration, numberOfIntervals);
+    public List<Pair<Long, Long>> getIntervalValuesArray(Integer nodeId, Integer unitId, PeriodData periodData) {
+        List<UnitValue> allValuesWithinPeriod = unitValueRepository.findByIdSinceDate(nodeId, unitId, periodData.getOriginOfPeriod());
+        List<List<Long>> intervalsWithAllValues = getIntervalsWithAllValues(allValuesWithinPeriod, periodData);
+        return getIntervalValuesArray(intervalsWithAllValues, periodData);
     }
 
-    private List<List<Long>> getIntervalFullValuesArray(Integer nodeId, Integer unitId, Long intervalDuration, Integer numberOfIntervals, Long currentMillis) {
-        List<List<Long>> intervalFullValuesArray = new ArrayList<>();
+    private List<List<Long>> getIntervalsWithAllValues(List<UnitValue> allValues, PeriodData periodData) {
+        List<List<Long>> intervalsWithAllValues = getEmptyDynamicMatrix(periodData.getNumberOfIntervals());
+        allValues.forEach(value -> addToRightInterval(value, intervalsWithAllValues, periodData));
+        return intervalsWithAllValues;
+    }
+
+    private List<List<Long>> getEmptyDynamicMatrix(Integer numberOfIntervals) {
+        List<List<Long>> matrix = new ArrayList<>();
         for(int i = 0; i < numberOfIntervals; i++) {
-            intervalFullValuesArray.add(new ArrayList<>());
+            matrix.add(new ArrayList<>());
         }
-        unitValueRepository.findByIdSinceDate(nodeId, unitId, currentMillis - intervalDuration*numberOfIntervals)
-                .forEach(value -> addToArray(value, intervalFullValuesArray, intervalDuration, numberOfIntervals, currentMillis));
-
-        return intervalFullValuesArray;
+        return matrix;
     }
 
-    private void addToArray(UnitValue value, List<List<Long>> intervalArray, Long intervalDuration, Integer numberOfIntervals, Long currentMillis) {
-        if(currentMillis - intervalDuration*numberOfIntervals <= value.getTimestamp() && value.getTimestamp() < currentMillis) {
+    private void addToRightInterval(UnitValue value, List<List<Long>> intervalArray, PeriodData periodData) {
+        if(periodData.includesTimeValue(value.getTimestamp())) {
             intervalArray
-                    .get(getIntervalArrayIndex((double) currentMillis, (double) value.getTimestamp(), (double) intervalDuration, (double) numberOfIntervals))
+                    .get(periodData.getIntervalIndex(value.getTimestamp()))
                     .add(value.getValue());
         }
     }
 
-    private Integer getIntervalArrayIndex(double currentMillis, double timestamp, double intervalDuration, double numberOfIntervals) {
-        return (int) ((intervalDuration*numberOfIntervals - (currentMillis - timestamp)) / (intervalDuration));
-    }
-
-    private List<Pair<Long, Long>> getIntervalValuesArray(List<List<Long>> fullIntervalArray, Long intervalDuration, Integer numberOfIntervals) {
+    private List<Pair<Long, Long>> getIntervalValuesArray(List<List<Long>> intervalsWithAllValues, PeriodData periodData) {
         List<Pair<Long, Long>> intervalValuesArray = new ArrayList<>();
-        for(int i = 0; i < numberOfIntervals; i++) {
+        for(int i = 0; i < periodData.getNumberOfIntervals(); i++) {
             intervalValuesArray.add(Pair.of(
-                    getIntervalTimestamp(i, intervalDuration, numberOfIntervals),
-                    fullIntervalArray.get(i).isEmpty() && i!=0 ? intervalValuesArray.get(i-1).getSecond(): getIntervalMean(fullIntervalArray.get(i))));
+                    periodData.getIntervalTimestamp(i),
+                    getMeanOfValues(intervalsWithAllValues, intervalValuesArray, i)));
         }
         return intervalValuesArray;
     }
 
-    private Long getIntervalTimestamp(Integer index, Long intervalDuration, Integer numberOfIntervals) {
-        return clock.instant().toEpochMilli() - intervalDuration*numberOfIntervals + intervalDuration*index;
+    private long getMeanOfValues(List<List<Long>> intervalsWithAllValues, List<Pair<Long, Long>> intervalValuesArray, int intervalIndex) {
+        List<Long> valuesOfInterval = intervalsWithAllValues.get(intervalIndex);
+        return intervalIsEmpty(valuesOfInterval, intervalIndex) ?
+                intervalValuesArray.get(intervalIndex - 1).getSecond() :
+                getIntervalMean(valuesOfInterval);
+    }
+
+    private boolean intervalIsEmpty(List<Long> valuesOfInterval, int intervalIndex) {
+        return valuesOfInterval.isEmpty() && intervalIndex != 0;
     }
 
     private long getIntervalMean(List<Long> values) {
