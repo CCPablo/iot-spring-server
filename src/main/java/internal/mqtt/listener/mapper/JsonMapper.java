@@ -44,7 +44,7 @@ public class JsonMapper {
         }
     }
 
-    public static <T> String getSerializedMessage(T t) {
+    public static <T> String getSerializedObject(T t) {
         try {
             return JSON_MAPPER.writeValueAsString(t);
         } catch (IOException ex) {

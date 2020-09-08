@@ -1,4 +1,4 @@
-package internal.scheduler.condition;
+package internal.scheduler.task.condition;
 
 import java.time.Duration;
 

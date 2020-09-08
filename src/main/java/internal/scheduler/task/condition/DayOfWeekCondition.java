@@ -1,14 +1,14 @@
-package internal.scheduler.condition;
+package internal.scheduler.task.condition;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 public class DayOfWeekCondition implements ICondition{
 
-    ArrayList<Boolean> daysEnabled;
+    List<Boolean> daysEnabled;
 
-    public DayOfWeekCondition(ArrayList<Boolean> days) {
+    public DayOfWeekCondition(List<Boolean> days) {
         this.daysEnabled = days;
     }
 

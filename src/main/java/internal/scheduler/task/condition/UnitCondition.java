@@ -1,4 +1,4 @@
-package internal.scheduler.condition;
+package internal.scheduler.task.condition;
 
 import internal.model.StatusType;
 import internal.service.NodeService;

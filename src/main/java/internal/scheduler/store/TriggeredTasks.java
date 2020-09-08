@@ -1,9 +1,8 @@
 package internal.scheduler.store;
 
-import internal.scheduler.action.IAction;
-import internal.scheduler.condition.ICondition;
+import internal.scheduler.task.condition.ICondition;
 import internal.scheduler.task.TriggeredTask;
-import internal.scheduler.trigger.ATrigger;
+import internal.scheduler.task.trigger.ATrigger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,8 @@ public class TriggeredTasks {
 
     private final Map<String, TriggeredTask> activeTriggeredTasks = new HashMap<>();
 
-    public void addNewTriggeredTask(String taskName, List<ATrigger> aTriggers, List<ICondition> iConditions, List<IAction> iActions) {
-        activeTriggeredTasks.putIfAbsent(taskName, new TriggeredTask(aTriggers, iConditions, iActions, true));
+    public void addNewTriggeredTask(String taskName, List<ATrigger> aTriggers, List<ICondition> iConditions, List<Runnable> iActions) {
+        activeTriggeredTasks.putIfAbsent(taskName, new TriggeredTask(iActions, iConditions, aTriggers, true));
     }
 
     public void checkTriggeredTasks() {

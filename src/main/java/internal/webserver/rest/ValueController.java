@@ -3,6 +3,7 @@ package internal.webserver.rest;
 import internal.model.unit.UnitValue;
 import internal.repository.implementation.UnitValueRepositoryImpl;
 import internal.repository.model.ApplicationUser;
+import internal.service.PeriodData;
 import internal.service.ValueService;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Random;
 
-@RestController("/v1/api/value")
+@RestController
+@RequestMapping("/api/v1/values")
 public class ValueController {
 
     private final ValueService valueService;
@@ -33,6 +35,6 @@ public class ValueController {
                                             @RequestParam Integer unitId,
                                             @RequestParam Long intervalDuration,
                                             @RequestParam Integer numberOfValues) {
-        return valueService.getIntervalValuesArray(nodeId, unitId, intervalDuration, numberOfValues);
+        return valueService.getIntervalValuesArray(nodeId, unitId, new PeriodData(intervalDuration, numberOfValues));
     }
 }

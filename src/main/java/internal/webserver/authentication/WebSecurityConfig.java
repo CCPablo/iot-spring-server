@@ -1,7 +1,9 @@
 package internal.webserver.authentication;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,40 +17,47 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.logging.Logger;
 
 import static internal.webserver.authentication.SecurityConstants.AUTH_LOGIN_URL;
 
 @Configuration
+@AllArgsConstructor
 @EnableWebSecurity
-@EnableScheduling
-@EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
 
     private final PasswordEncoder passwordEncoder;
 
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, PasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private static final String[] SWAGGER_WHITELIST = {
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"
+    };
+
+    private static final String FRONT_LOCAL = "http://localhost:4200";
+
+    private static final String FRONT_PROD = "http://nowater.servebeer.com:7000";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
+        http.cors().and().csrf().disable()
+                .authorizeRequests()
                 .antMatchers(HttpMethod.POST, AUTH_LOGIN_URL).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, AUTH_LOGIN_URL).permitAll()
+                .antMatchers("/sse").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
@@ -57,9 +66,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/swagger-ui.html");
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(SWAGGER_WHITELIST);
     }
+
+    /*
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
+    }
+     */
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -72,26 +90,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         */
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
+        configuration.addAllowedOrigin(FRONT_LOCAL);
+        configuration.addAllowedOrigin(FRONT_PROD);
+        configuration.addAllowedMethod(CorsConfiguration.ALL);
+        configuration.addAllowedHeader(CorsConfiguration.ALL);
         configuration.setAllowCredentials(true);
-        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**");
-            }
-        };
-    }
 
     /*
     @Bean

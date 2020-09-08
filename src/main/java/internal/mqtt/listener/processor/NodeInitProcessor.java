@@ -21,6 +21,7 @@ public class NodeInitProcessor implements IMsgProcessor {
     public void process(MqttMessage message) {
         Node nodeInitMsg = JsonMapper.getDeserializedMessage(message, Node.class);
 
+        assert nodeInitMsg != null;
         nodeService.addNewNode(nodeInitMsg);
     }
 }

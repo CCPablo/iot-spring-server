@@ -1,6 +1,6 @@
 package internal.webserver.rest;
 
-import internal.scheduler.action.SetValueAction;
+import internal.scheduler.task.action.SetValueAction;
 import internal.scheduler.store.PeriodicTasks;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
@@ -17,13 +17,13 @@ public class TaskController {
     @Autowired
     private final PeriodicTasks periodicTasks;
 
-    @PostMapping(value = "/task/create")
+    @PostMapping(value = "/create")
     public void addNewTask(@RequestParam String name, @RequestParam Integer nodeId, @RequestParam Integer actuatorId, @RequestParam Long value, @RequestParam Integer seconds) {
         SetValueAction setValueAction = new SetValueAction(nodeId, actuatorId, value);
         periodicTasks.addNewPeriodicTask(name, setValueAction, LocalDateTime.now().plusSeconds(seconds));
     }
 
-    @PostMapping(value = "/task/remove")
+    @PostMapping(value = "/remove")
     public void removeTask(@RequestParam String name) {
         periodicTasks.removePeriodicTask(name);
     }

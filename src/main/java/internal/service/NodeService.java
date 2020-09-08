@@ -27,7 +27,11 @@ public class NodeService {
     }
 
     public void addNewNode(Node node) {
-        cachedNodes.putIfAbsent(node.getId(), node);
+        if(!cachedNodes.containsKey(node.getId())){
+            cachedNodes.putIfAbsent(node.getId(), node);
+        }
+
+        nodeRepository.saveNode(node);
     }
 
     public void addNewNode(Integer nodeId, StatusType statusType, String name, String description, List<Unit> units) {
@@ -42,7 +46,7 @@ public class NodeService {
         Node node = Node(nodeId, StatusType.OFF, name, description,  units);
 
         if(!cachedNodes.containsKey(nodeId)){
-            Node node1 = cachedNodes.putIfAbsent(nodeId, node);
+            cachedNodes.putIfAbsent(nodeId, node);
         }
 
         nodeRepository.saveNode(node);
@@ -71,7 +75,8 @@ public class NodeService {
     }
 
     public boolean isNodeActive(Integer nodeId) {
-        return cachedNodes.getOrDefault(nodeId, Node.builder().status(StatusType.OFF).build()).getStatus().equals(StatusType.ON);
+        return cachedNodes.getOrDefault(nodeId, Node.builder().status(StatusType.OFF).build())
+                .getStatus().equals(StatusType.ON);
     }
 
     private Node Node(Integer nodeId, StatusType statusType, String name, String description, List<Unit> units) {

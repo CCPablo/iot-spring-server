@@ -1,8 +1,7 @@
 package internal.scheduler.task;
 
-import internal.scheduler.condition.ICondition;
-import internal.scheduler.action.IAction;
-import internal.scheduler.trigger.ATrigger;
+import internal.scheduler.task.condition.ICondition;
+import internal.scheduler.task.trigger.ATrigger;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,23 +12,30 @@ public class TriggeredTask {
 
     private final List<ICondition> iConditions;
 
-    private final String id;
+    private final String id = UUID.randomUUID().toString();
 
-    private final List<IAction> IActions;
+    private final List<Runnable> IActions;
 
     private final boolean deleteOnRun;
 
-    public TriggeredTask(List<ATrigger> aTriggers, List<ICondition> iConditions, List<IAction> IActions, boolean deleteOnRun) {
+    public TriggeredTask(List<Runnable> IActions, List<ICondition> iConditions, List<ATrigger> aTriggers, Boolean deleteOnRun) {
         this.aTriggers = aTriggers;
         this.iConditions = iConditions;
         this.IActions = IActions;
         this.deleteOnRun = deleteOnRun;
-        this.id = UUID.randomUUID().toString();
+    }
+
+    public boolean run() {
+        if (needToRun()) {
+            IActions.forEach(Runnable::run);
+            return true;
+        }
+        return false;
     }
 
     public boolean runAndDelete() {
         if (needToRun()) {
-            IActions.forEach(IAction::run);
+            IActions.forEach(Runnable::run);
             return deleteOnRun;
         }
         return false;

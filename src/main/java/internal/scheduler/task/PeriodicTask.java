@@ -1,7 +1,6 @@
 package internal.scheduler.task;
 
-import internal.scheduler.condition.ICondition;
-import internal.scheduler.action.IAction;
+import internal.scheduler.task.condition.ICondition;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
@@ -23,50 +22,46 @@ public class PeriodicTask {
 
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
-    private ScheduledFuture scheduledFuture;
+    private ScheduledFuture<?> scheduledFuture;
 
-    private final List<ICondition> iConditions;
+    private final List<ICondition> conditions;
 
-    private final List<IAction> IActions;
+    private final List<Runnable> actions;
+
+    private final String id = UUID.randomUUID().toString();
 
     private LocalDateTime targetTime;
 
     private TemporalAmount increment;
 
-    private final String id;
-
-    public PeriodicTask(List<IAction> IActions, LocalDateTime targetTime) {
-        this.IActions = IActions;
+    public PeriodicTask(List<Runnable> actions, LocalDateTime targetTime) {
+        this.actions = actions;
         this.targetTime = targetTime;
-        this.id = UUID.randomUUID().toString();
-        this.iConditions = List.of(() -> true);
+        this.conditions = List.of(() -> true);
     }
 
-    public PeriodicTask(List<IAction> IActions, List<ICondition> iConditions, LocalDateTime targetTime) {
-        this.IActions = IActions;
-        this.iConditions = iConditions;
+    public PeriodicTask(List<Runnable> actions, List<ICondition> conditions, LocalDateTime targetTime) {
+        this.actions = actions;
+        this.conditions = conditions;
         this.targetTime = targetTime;
-        this.id = UUID.randomUUID().toString();
     }
 
-    public PeriodicTask(List<IAction> IActions, List<ICondition> iConditions, LocalDateTime targetTime, TemporalAmount increment) {
-        this.IActions = IActions;
-        this.iConditions = iConditions;
+    public PeriodicTask(List<Runnable> actions, List<ICondition> conditions, LocalDateTime targetTime, TemporalAmount increment) {
+        this.actions = actions;
+        this.conditions = conditions;
         this.targetTime = targetTime;
         this.increment = increment;
-        this.id = UUID.randomUUID().toString();
     }
 
     @PostConstruct
     public void startExecutionAndStore() {
         Runnable taskWrapper = () -> {
-            if (iConditions.stream().allMatch(ICondition::test)) {
-                IActions.forEach(IAction::run);
+            if (conditions.stream().allMatch(ICondition::test)) {
+                actions.forEach(Runnable::run);
             }
             startExecution();
         };
         scheduledFuture = executorService.schedule(taskWrapper, computeNextDelay(), TimeUnit.SECONDS);
-        //TODO: Store task in Mongodb
     }
 
     public void updateExecutionTime(LocalDateTime newTargetTime) {
@@ -87,8 +82,8 @@ public class PeriodicTask {
 
     private void startExecution() {
         Runnable taskWrapper = () -> {
-            if (iConditions.stream().allMatch(ICondition::test)) {
-                IActions.forEach(IAction::run);
+            if (conditions.stream().allMatch(ICondition::test)) {
+                actions.forEach(Runnable::run);
             }
             startExecution();
         };
@@ -97,15 +92,15 @@ public class PeriodicTask {
 
     private long computeNextDelay() {
         final ZonedDateTime zonedNow = ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault());
-        ZonedDateTime zonedNextTarget =
-                zonedNow.withHour(targetTime.getHour()).withMinute(targetTime.getMinute()).withSecond(targetTime.getSecond())
-                        .truncatedTo(ChronoUnit.SECONDS);
-        if (zonedNow.compareTo(zonedNextTarget) >= 0) {
-            zonedNextTarget = zonedNextTarget.plus(increment);
+        ZonedDateTime zonedTargetTime = targetTime.atZone(ZoneId.systemDefault()).truncatedTo(ChronoUnit.SECONDS);
+        long secondsToTarget = Duration.between(zonedNow, zonedTargetTime).toSeconds();
+        if (secondsToTarget > 0) {
+            targetTime = zonedTargetTime.toLocalDateTime();
+        } else {
+            targetTime = zonedTargetTime.plus(increment).toLocalDateTime();
         }
-        targetTime = zonedNextTarget.toLocalDateTime();
-        Duration duration = Duration.between(zonedNow, zonedNextTarget);
-        log.info(String.format("Task scheduled for %s", zonedNextTarget.toString()));
-        return duration.getSeconds() + 1;
+
+        log.info(String.format("PTask scheduled for %s", zonedTargetTime.toString()));
+        return secondsToTarget + 1;
     }
 }

@@ -19,16 +19,22 @@ public enum TopicsToSub {
 
     public boolean topicMatch(String topicToCheck) {
         String[] topicMembers = topic.split("/");
-        String[] toCheckTopicMembers = topicToCheck.split("/");
-        if (topicMembers.length != toCheckTopicMembers.length) {
+        String[] topicToCheckMembers = topicToCheck.split("/");
+        boolean notSameMembersLength = topicMembers.length != topicToCheckMembers.length;
+        if (notSameMembersLength) {
             return false;
         }
         for (int i = 0; i < topicMembers.length; i++) {
-            if (!topicMembers[i].equals("+") && !topicMembers[i].equals("#")) {
-                if (!topicMembers[i].equals(toCheckTopicMembers[i])) {
-                    return false;
-                }
+            if (!topicMemberMatch(topicMembers[i], topicToCheckMembers[i])) {
+                return false;
             }
+        }
+        return true;
+    }
+
+    private boolean topicMemberMatch(String topic, String topicToCheck) {
+        if (!topic.equals("+") && !topic.equals("#")) {
+            return topic.equals(topicToCheck);
         }
         return true;
     }

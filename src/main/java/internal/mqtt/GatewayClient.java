@@ -104,17 +104,6 @@ public class GatewayClient implements MqttCallbackExtended {
         log.info("MQTT message sent");
     }
 
-    public static <T> void publishMessage(T t, TopicsToPub topicsToPub) {
-        MqttMessage message = new MqttMessage();
-        message.setPayload(Objects.requireNonNull(JsonMapper.getSerializedMessage(t)).getBytes(StandardCharsets.UTF_8));
-
-        try {
-            log.info(String.format("Publishing message: %s in topic %s", Arrays.toString(message.getPayload()), topicsToPub.getTopic()));
-            client.publish(topicsToPub.getTopic(), message);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void publishConnectionMessage(Boolean connected) {
         publishMessage(new GatewayConnectMsg(connected), TopicsToPub.GATEWAY_CONNECT_TOPIC);
@@ -122,5 +111,17 @@ public class GatewayClient implements MqttCallbackExtended {
 
     public static void publishUnitValueMessage(Integer nodeId, Integer unitId, Long value) {
         publishMessage(new ActuatorValueMsg(nodeId, unitId, value), TopicsToPub.UNIT_VALUE_TOPIC);
+    }
+
+    public static <T> void publishMessage(T t, TopicsToPub topicsToPub) {
+        MqttMessage message = new MqttMessage();
+        message.setPayload(Objects.requireNonNull(JsonMapper.getSerializedObject(t)).getBytes(StandardCharsets.UTF_8));
+
+        try {
+            log.info(String.format("Publishing message: in topic %s", topicsToPub.getTopic()));
+            client.publish(topicsToPub.getTopic(), message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 }

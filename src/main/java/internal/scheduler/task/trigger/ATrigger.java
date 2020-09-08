@@ -1,4 +1,4 @@
-package internal.scheduler.trigger;
+package internal.scheduler.task.trigger;
 
 import internal.service.NodeService;
 import internal.util.BeanUtil;
@@ -8,6 +8,8 @@ public abstract class ATrigger {
     protected final Integer nodeId;
 
     protected final Integer unitId;
+
+    protected boolean triggeredFlag = false;
 
     protected ATrigger(Integer nodeId, Integer unitId) {
         NodeService nodeService = BeanUtil.getBean(NodeService.class);

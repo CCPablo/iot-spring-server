@@ -26,27 +26,23 @@ class ValueServiceTest {
     @Mock
     UnitValueRepositoryImpl unitValueRepository;
 
-    @Mock
-    Clock clock;
-
     @InjectMocks
     ValueService valueService;
 
     @Test
     void getIntervalValues() {
-        Instant now = Instant.now();
+        PeriodData periodData = new PeriodData(1000L, 5);
+        when(unitValueRepository.findByIdSinceDate(eq(1),eq(1), anyLong())).thenReturn(getUnitValues(periodData.getEndOfPeriod(), 50, 100L));
 
-        when(unitValueRepository.findByIdSinceDate(eq(1),eq(1), anyLong())).thenReturn(getUnitValues(now, 50, 100L));
-        when(clock.instant()).thenReturn(now);
+        List<Pair<Long, Long>> intervalValuesArray = valueService.getIntervalValuesArray(1,1, new PeriodData(1000L, 5));
 
-        List<Pair<Long, Long>> intervalValuesArray = valueService.getIntervalValuesArray(1,1,1000L,5);
     }
 
     interface TestData {
-        static List<UnitValue> getUnitValues(Instant instant, Integer numberOfValues, Long intervalTime) {
+        static List<UnitValue> getUnitValues(Long endOfPeriod, Integer numberOfValues, Long intervalTime) {
             List<UnitValue> unitValues = new ArrayList<>();
             for( int i = 0; i<numberOfValues; i++) {
-                unitValues.add(getUnitValue((long)i + 100L, instant.toEpochMilli() - intervalTime*i));
+                unitValues.add(getUnitValue((long)i + 100L, endOfPeriod - intervalTime*i));
             }
             return unitValues;
         }

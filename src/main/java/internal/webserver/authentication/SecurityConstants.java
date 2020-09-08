@@ -2,7 +2,7 @@ package internal.webserver.authentication;
 
 public class SecurityConstants {
 
-    public static final String AUTH_LOGIN_URL = "/login";
+    public static final String AUTH_LOGIN_URL = "/api/v1/login";
     public static final String AUTH_LOGOUT_URL = "/api/logout";
 
     // Signing key for HS512 algorithm

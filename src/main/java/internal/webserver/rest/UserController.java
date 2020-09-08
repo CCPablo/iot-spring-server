@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/v1/api/user")
+@RestController
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     @Autowired
@@ -24,7 +25,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping(value = "/users")
+    @GetMapping(value = "")
     public List<ApplicationUser> getUsers() {
         return userService.getAllUsers();
     }

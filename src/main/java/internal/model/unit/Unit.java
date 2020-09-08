@@ -23,6 +23,8 @@ public class Unit {
 
     UnitType type;
 
+    String graphColor;
+
     Long measureRate;
 
     StatusType status;

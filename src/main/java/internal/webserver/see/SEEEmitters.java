@@ -34,7 +34,7 @@ public class SEEEmitters {
         synchronized (emitters) {
             emitters.forEach(emitter -> {
                 try {
-                    emitter.send(Objects.requireNonNull(JsonMapper.getSerializedMessage(obj)));
+                    emitter.send(Objects.requireNonNull(JsonMapper.getSerializedObject(obj)));
                 } catch (Exception e) {
                     emitter.completeWithError(e);
                     failedEmitters.add(emitter);
