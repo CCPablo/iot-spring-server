@@ -88,7 +88,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", config.applyPermitDefaultValues());
         return source;
         */
-
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(FRONT_LOCAL);
         configuration.addAllowedOrigin(FRONT_PROD);
