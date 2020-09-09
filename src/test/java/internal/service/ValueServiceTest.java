@@ -1,6 +1,6 @@
 package internal.service;
 
-import internal.model.unit.UnitValue;
+import internal.model.unit.UnitMeasure;
 import internal.repository.implementation.UnitValueRepositoryImpl;
 
 import org.junit.jupiter.api.Test;
@@ -10,8 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.util.Pair;
 
-import java.time.Clock;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,16 +37,16 @@ class ValueServiceTest {
     }
 
     interface TestData {
-        static List<UnitValue> getUnitValues(Long endOfPeriod, Integer numberOfValues, Long intervalTime) {
-            List<UnitValue> unitValues = new ArrayList<>();
+        static List<UnitMeasure> getUnitValues(Long endOfPeriod, Integer numberOfValues, Long intervalTime) {
+            List<UnitMeasure> unitMeasures = new ArrayList<>();
             for( int i = 0; i<numberOfValues; i++) {
-                unitValues.add(getUnitValue((long)i + 100L, endOfPeriod - intervalTime*i));
+                unitMeasures.add(getUnitValue((long)i + 100L, endOfPeriod - intervalTime*i));
             }
-            return unitValues;
+            return unitMeasures;
         }
 
-        static UnitValue getUnitValue(Long value, Long timestamp) {
-            return UnitValue.builder().nodeId(1).unitId(1).value(value).timestamp(timestamp).build();
+        static UnitMeasure getUnitValue(Long value, Long timestamp) {
+            return UnitMeasure.builder().nodeId(1).unitId(1).value(value).timestamp(timestamp).build();
         }
     }
 }

@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Builder
-@Document(collection = "unitValues")
-public class UnitValue {
+@Document(collection = "unitMeasures")
+public class UnitMeasure {
 
     private Integer nodeId;
 

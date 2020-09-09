@@ -1,7 +1,9 @@
 package internal.service;
 
-import internal.model.unit.UnitValue;
+import internal.model.unit.UnitMeasure;
 import internal.repository.implementation.UnitValueRepositoryImpl;
+import internal.util.key.UnitId;
+import internal.util.key.KeyFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -18,34 +20,46 @@ public class ValueService {
 
     private final UnitValueRepositoryImpl unitValueRepository;
 
-    private final Map<Integer, Map<Integer, LinkedList<UnitValue>>> cachedValues = new ConcurrentHashMap<>();
+    private final Map<Integer, Map<Integer, LinkedList<UnitMeasure>>> cachedValues = new ConcurrentHashMap<>();
 
     public ValueService(Clock clock, UnitValueRepositoryImpl unitValueRepository) {
         this.clock = clock;
         this.unitValueRepository = unitValueRepository;
     }
 
-    public void addValue(UnitValue unitValue) {
-        unitValueRepository.addUnitValue(unitValue);
+    public void addValue(UnitMeasure unitMeasure) {
+        unitValueRepository.addUnitValue(unitMeasure);
     }
 
     public long getMeanValue(Integer nodeId, Integer unitId) {
-        Map<Integer, LinkedList<UnitValue>> valuesOfNode = cachedValues.get(nodeId);
+        Map<Integer, LinkedList<UnitMeasure>> valuesOfNode = cachedValues.get(nodeId);
         if (valuesOfNode.isEmpty() || !isUnitCached(unitId, valuesOfNode)) {
             return -1;
         } else {
-            Queue<UnitValue> unitValues = cachedValues.get(nodeId).get(unitId);
-            return !unitValues.isEmpty() ? (long) unitValues.stream().mapToLong(UnitValue::getValue).average().orElse(-1) : -1;
+            Queue<UnitMeasure> unitMeasures = cachedValues.get(nodeId).get(unitId);
+            return !unitMeasures.isEmpty() ? (long) unitMeasures.stream().mapToLong(UnitMeasure::getValue).average().orElse(-1) : -1;
         }
     }
 
-    public List<Pair<Long, Long>> getIntervalValuesArray(Integer nodeId, Integer unitId, PeriodData periodData) {
-        List<UnitValue> allValuesWithinPeriod = unitValueRepository.findByIdSinceDate(nodeId, unitId, periodData.getOriginOfPeriod());
+    public List<List<Pair<Long, Long>>> getIntervalValuesArrays(List<String> unitKeys, PeriodData periodData) {
+        List<List<Pair<Long, Long>>> arrays = new ArrayList<>();
+        unitKeys.forEach((unitKey) -> arrays.add(getIntervalValuesArray(KeyFormatter.getUnitId(unitKey), periodData)));
+        return arrays;
+    }
+
+    public List<Pair<Long, Long>> getIntervalValuesArray(UnitId unitId, PeriodData periodData) {
+        List<UnitMeasure> allValuesWithinPeriod = unitValueRepository.findByIdSinceDate(unitId.getNodeId(), unitId.getUnitId(), periodData.getOriginOfPeriod());
         List<List<Long>> intervalsWithAllValues = getIntervalsWithAllValues(allValuesWithinPeriod, periodData);
         return getIntervalValuesArray(intervalsWithAllValues, periodData);
     }
 
-    private List<List<Long>> getIntervalsWithAllValues(List<UnitValue> allValues, PeriodData periodData) {
+    public List<Pair<Long, Long>> getIntervalValuesArray(Integer nodeId, Integer unitId, PeriodData periodData) {
+        List<UnitMeasure> allValuesWithinPeriod = unitValueRepository.findByIdSinceDate(nodeId, unitId, periodData.getOriginOfPeriod());
+        List<List<Long>> intervalsWithAllValues = getIntervalsWithAllValues(allValuesWithinPeriod, periodData);
+        return getIntervalValuesArray(intervalsWithAllValues, periodData);
+    }
+
+    private List<List<Long>> getIntervalsWithAllValues(List<UnitMeasure> allValues, PeriodData periodData) {
         List<List<Long>> intervalsWithAllValues = getEmptyDynamicMatrix(periodData.getNumberOfIntervals());
         allValues.forEach(value -> addToRightInterval(value, intervalsWithAllValues, periodData));
         return intervalsWithAllValues;
@@ -59,7 +73,7 @@ public class ValueService {
         return matrix;
     }
 
-    private void addToRightInterval(UnitValue value, List<List<Long>> intervalArray, PeriodData periodData) {
+    private void addToRightInterval(UnitMeasure value, List<List<Long>> intervalArray, PeriodData periodData) {
         if(periodData.includesTimeValue(value.getTimestamp())) {
             intervalArray
                     .get(periodData.getIntervalIndex(value.getTimestamp()))
@@ -99,7 +113,7 @@ public class ValueService {
         return sum;
     }
 
-    private boolean isUnitCached(Integer unitId, Map<Integer, LinkedList<UnitValue>> valuesOfNode) {
+    private boolean isUnitCached(Integer unitId, Map<Integer, LinkedList<UnitMeasure>> valuesOfNode) {
         return valuesOfNode.keySet().stream().anyMatch(unitId::equals);
     }
 
