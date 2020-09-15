@@ -2,8 +2,8 @@ package internal.mqtt;
 
 import internal.mqtt.listener.exception.ComponentNotRegisteredException;
 import internal.mqtt.listener.exception.InvalidSensorValueException;
-import internal.mqtt.listener.mapper.JsonMapper;
-import internal.mqtt.listener.mapper.ProcessorMapper;
+import internal.mqtt.mapper.JsonMapper;
+import internal.mqtt.mapper.ProcessorMapper;
 import internal.mqtt.persistence.PersistenceClient;
 import internal.mqtt.publisher.ActuatorValueMsg;
 import internal.mqtt.publisher.GatewayConnectMsg;
@@ -113,13 +113,13 @@ public class GatewayClient implements MqttCallbackExtended {
         publishMessage(new ActuatorValueMsg(nodeId, unitId, value), TopicsToPub.UNIT_VALUE_TOPIC);
     }
 
-    public static <T> void publishMessage(T t, TopicsToPub topicsToPub) {
-        MqttMessage message = new MqttMessage();
-        message.setPayload(Objects.requireNonNull(JsonMapper.getSerializedObject(t)).getBytes(StandardCharsets.UTF_8));
+    public static <MessageClass> void publishMessage(MessageClass message, TopicsToPub topicsToPub) {
+        MqttMessage mqttMessage = new MqttMessage();
+        mqttMessage.setPayload(Objects.requireNonNull(JsonMapper.getSerializedObject(message)).getBytes(StandardCharsets.UTF_8));
 
         try {
             log.info(String.format("Publishing message: in topic %s", topicsToPub.getTopic()));
-            client.publish(topicsToPub.getTopic(), message);
+            client.publish(topicsToPub.getTopic(), mqttMessage);
         } catch (MqttException e) {
             e.printStackTrace();
         }

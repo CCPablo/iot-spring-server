@@ -36,6 +36,6 @@ public class PeriodData {
     }
 
     public Long getIntervalTimestamp(Integer index) {
-        return endOfPeriod - intervalDuration*(numberOfIntervals-index);
+        return endOfPeriod - intervalDuration*(numberOfIntervals-index-1);
     }
 }

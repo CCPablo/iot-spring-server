@@ -3,12 +3,12 @@ package internal.webserver.authentication;
 public class SecurityConstants {
 
     public static final String AUTH_LOGIN_URL = "/api/v1/login";
-    public static final String AUTH_LOGOUT_URL = "/api/logout";
+    public static final String AUTH_LOGOUT_URL = "/api/v1/logout";
 
     // Signing key for HS512 algorithm
     // You can use the page http://www.allkeysgenerator.com/ to generate all kinds of keys
-    public static final String JWT_SECRET = "n2r5u8x/A4D*G-KmPdSgVkYp226v9y$B&E(H+MbQeThWmZq4t7w!z%C*F=J@NcRf";
-    public static final long EXPIRATION_TIME = 30_000_000; // 10 days
+    public static final String JWT_SECRET = "n2r5ñ5x/A4D*G-KmPdSgVkYp226v9y$B&E(H+MbQeThWmZq4t7w!z%C*F=J@NcRf";
+    public static final long EXPIRATION_TIME = 100_000_000; // 10 days
 
     // JWT token defaults
     public static final String TOKEN_HEADER = "Authorization";

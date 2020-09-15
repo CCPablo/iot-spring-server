@@ -1,5 +1,5 @@
 package internal.model;
 
 public enum LocationType {
-    LR,B1,B2
+    LIVING_ROOM,KITCHEN,BEDROOM
 }

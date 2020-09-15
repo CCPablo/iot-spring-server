@@ -53,12 +53,11 @@ public class NodeRepositoryImpl implements NodeRepository {
     }
 
     @Override
-    public long updateNode(Node node) {
+    public UpdateResult updateNode(Node node) {
         Query query = new Query(Criteria.where("nodeId").is(node.getId()));
         Update update = new Update()
                 .set("name", node.getName())
                 .set("units", node.getUnits());
-        UpdateResult result = mongoTemplate.updateFirst(query, update, Node.class);
-        return result.getMatchedCount();
+        return mongoTemplate.updateFirst(query, update, Node.class);
     }
 }

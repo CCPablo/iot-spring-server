@@ -25,6 +25,8 @@ public class Node {
 
     LocationType location;
 
+    String locationName;
+
     String connectedSince;
 
     String ip;

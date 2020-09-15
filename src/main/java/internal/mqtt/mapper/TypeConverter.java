@@ -1,6 +1,4 @@
-package internal.mqtt.listener.mapper;
-
-import internal.repository.model.ActuatorUpdate;
+package internal.mqtt.mapper;
 
 public class TypeConverter {
 

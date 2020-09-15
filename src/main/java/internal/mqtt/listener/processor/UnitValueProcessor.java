@@ -1,7 +1,7 @@
 package internal.mqtt.listener.processor;
 
-import internal.model.unit.UnitValue;
-import internal.mqtt.listener.mapper.JsonMapper;
+import internal.model.unit.UnitMeasure;
+import internal.mqtt.mapper.JsonMapper;
 import internal.service.SensorService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class UnitValueProcessor implements IMsgProcessor {
 
     @Override
     public void process(MqttMessage message) {
-        UnitValue actuatorUpdateMsg = JsonMapper.getDeserializedMessage(message, UnitValue.class);
+        UnitMeasure actuatorUpdateMsg = JsonMapper.getDeserializedMessage(message, UnitMeasure.class);
 
         assert actuatorUpdateMsg != null;
         unitService.addValue(actuatorUpdateMsg);

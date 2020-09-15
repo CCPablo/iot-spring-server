@@ -1,5 +1,6 @@
 package internal.repository;
 
+import com.mongodb.client.result.UpdateResult;
 import internal.model.node.Node;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface NodeRepository {
 
     Node findNodeById(Integer nodeId);
 
-    long updateNode(Node node);
+    UpdateResult updateNode(Node node);
 
     void deleteNodeById(Integer nodeId);
 }

@@ -1,4 +1,4 @@
-package internal.mqtt.listener.mapper;
+package internal.mqtt.mapper;
 
 import internal.mqtt.listener.exception.TopicNotRegisteredException;
 import internal.mqtt.listener.processor.NodeInitProcessor;

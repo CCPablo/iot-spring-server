@@ -42,9 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**"
     };
 
-    private static final String FRONT_LOCAL = "http://localhost:4200";
+    private static final String FRONT_LOCAL = "http://localhost";
 
-    private static final String FRONT_PROD = "http://nowater.servebeer.com:7000";
+    private static final String FRONT_PROD = "http://nowater.servebeer.com";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, AUTH_LOGIN_URL).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, AUTH_LOGIN_URL).permitAll()
-                .antMatchers("/sse").permitAll()
+                .antMatchers("/api/v1/values/sse").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(SWAGGER_WHITELIST);
+        web.ignoring().antMatchers(SWAGGER_WHITELIST).antMatchers("/api/v1/values/sse");
     }
 
     /*

@@ -7,6 +7,8 @@ import java.util.List;
 @Data
 public class PTask {
 
+    private String id;
+
     private String taskName;
 
     private Integer unitId;

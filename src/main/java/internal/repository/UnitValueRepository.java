@@ -1,20 +1,20 @@
 package internal.repository;
 
-import internal.model.unit.UnitValue;
+import internal.model.unit.UnitMeasure;
 
 import java.util.List;
 
 public interface UnitValueRepository {
 
-    void addUnitValue(UnitValue value);
+    void addUnitValue(UnitMeasure value);
 
-    List<UnitValue> findAll();
+    List<UnitMeasure> findAll();
 
-    List<UnitValue> findAllById(Integer nodeId, Integer unitId);
+    List<UnitMeasure> findAllById(Integer nodeId, Integer unitId);
 
-    UnitValue findFirstById(Integer nodeId, Integer unitId);
+    UnitMeasure findFirstById(Integer nodeId, Integer unitId);
 
-    List<UnitValue> findByIdSinceDate(Integer nodeId, Integer unitId, Long millisSince);
+    List<UnitMeasure> findByIdSinceDate(Integer nodeId, Integer unitId, Long millisSince);
 
     void deleteAll();
 }

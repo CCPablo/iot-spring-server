@@ -1,6 +1,6 @@
 package internal.webserver.see;
 
-import internal.mqtt.listener.mapper.JsonMapper;
+import internal.mqtt.mapper.JsonMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
