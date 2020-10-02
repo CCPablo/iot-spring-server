@@ -1,15 +1,17 @@
 package internal.webserver.rest;
 
-import internal.scheduler.task.action.SetValueAction;
 import internal.scheduler.store.PeriodicTasks;
+import internal.scheduler.task.action.SetValueAction;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
-@RestController("/v1/api/task")
+@RestController("/api/v1/task")
 @AllArgsConstructor
 @Api(value = "Tasks REST Endpoint")
 public class TaskController {

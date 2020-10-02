@@ -1,6 +1,5 @@
 package internal.scheduler.domain.entity;
 
-import internal.model.StatusType;
 import internal.scheduler.task.condition.ConditionType;
 import lombok.Data;
 

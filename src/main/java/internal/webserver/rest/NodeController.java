@@ -1,9 +1,9 @@
 package internal.webserver.rest;
 
 
-import internal.service.NodeService;
 import internal.model.node.Node;
 import internal.model.unit.Unit;
+import internal.service.NodeService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/nodes")
+@RequestMapping("/api/v1/node")
 @Api(value = "Nodes Resource REST Endpoint")
 public class NodeController {
 

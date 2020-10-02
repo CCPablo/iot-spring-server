@@ -1,7 +1,7 @@
 package internal.scheduler.store;
 
-import internal.scheduler.task.condition.ICondition;
 import internal.scheduler.task.TriggeredTask;
+import internal.scheduler.task.condition.ICondition;
 import internal.scheduler.task.trigger.ATrigger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

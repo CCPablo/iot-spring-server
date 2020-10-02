@@ -72,7 +72,7 @@ public class PeriodicTask {
     }
 
     public void stop() {
-        executorService.shutdownNow();
+        executorService.shutdown();
         try {
             executorService.awaitTermination(1, TimeUnit.DAYS);
         } catch (InterruptedException ex) {

@@ -39,6 +39,15 @@ public class JsonMapper {
         }
     }
 
+    public static <T> T getDeserializedHttpRequest(String message, Class<T> clazz) {
+        try {
+            return JSON_MAPPER.readValue(message, clazz);
+        } catch (IOException ex) {
+            log.error("Error deserializing  " + clazz.getName() + ". Exception: " + ex.toString());
+            return null;
+        }
+    }
+
     public static <T> String getSerializedObject(T t) {
         try {
             return JSON_MAPPER.writeValueAsString(t);

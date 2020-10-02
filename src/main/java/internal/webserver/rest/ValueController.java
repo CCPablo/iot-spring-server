@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/values")
+@RequestMapping("/api/v1/value")
 public class ValueController {
 
     private final ValueService valueService;

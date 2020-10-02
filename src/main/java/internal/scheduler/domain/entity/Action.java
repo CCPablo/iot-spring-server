@@ -12,4 +12,6 @@ public class Action {
     ActionType actionType;
 
     Long value;
+
+    Long delayMillis;
 }
